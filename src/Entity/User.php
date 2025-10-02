@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -30,6 +32,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, Bag>
+     */
+    #[ORM\OneToMany(targetEntity: Bag::class, mappedBy: 'owner', orphanRemoval: true)]
+    private Collection $bags;
+
+    public function __construct()
+    {
+        $this->bags = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -99,5 +112,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    /**
+     * @return Collection<int, Bag>
+     */
+    public function getBags(): Collection
+    {
+        return $this->bags;
+    }
+
+    public function addBag(Bag $bag): static
+    {
+        if (!$this->bags->contains($bag)) {
+            $this->bags->add($bag);
+            $bag->setOwner($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBag(Bag $bag): static
+    {
+        if ($this->bags->removeElement($bag)) {
+            // set the owning side to null (unless already changed)
+            if ($bag->getOwner() === $this) {
+                $bag->setOwner(null);
+            }
+        }
+
+        return $this;
     }
 }
