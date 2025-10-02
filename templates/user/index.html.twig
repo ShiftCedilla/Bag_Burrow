@@ -3,11 +3,26 @@
 
 {% block body %}
 
-    <h1>Hello {{ user.name }}!</h1>
+  <section>
 
+    <h1>Hello {{ user.name }}!</h1>
     
     <P>{{user.email}}</P>
 
+    </section>
+    <section>
+
+      <h2>Mes sacs</h2>
+
+      {% for bag in bags %}
+
+      <p>{{ bag.name}}</p>
+        
+      {% endfor %}
+       
+
+
+    </section>
   
 
 {% endblock %}

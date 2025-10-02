@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bag index{% endblock %}
+
+{% block body %}
+
+    <h1>Bag Borrow</h1>
+    <a href="{{ path('app_bag_new') }}">Ajouter un nouveau sac</a>
+
+
+       
+        <tbody>
+        {% for bag in bags %}
+        <section>
+            <div>
+                <img src="{{asset('upload/bag/' ~ bag.img) }}" alt="">
+            </div>
+            <div>
+                <p>Nom:{{bag.name}} </p>
+                <p>Owner{{bag.owner.name}}</p>
+                {# <p>etat{{bag.condition.name}} </p> #}
+            </div>
+        </section>
+          
+        {% else %}
+            <tr>
+                <td colspan="6">Non aucun enregistrement</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+
+{% endblock %}
