@@ -15,12 +15,14 @@ final class UserController extends AbstractController
     {   
         $user = $this->getUser(); 
 
-        $bags = $bagRepository->findBy(['owner' => $user->getId()]);
-
+        $ownerbags = $bagRepository->findBy(['owner' => $user->getId()]);
+        $borrowedbags = $bagRepository->findBy(['borrower' => $user-> getId()]);
         
         return $this->render('user/index.html.twig', [
             'user'=>$user,
-            'bags'=>$bags,
+            'ownerbags'=>$ownerbags,
+            'borrowerbags'=>$borrowedbags
+
         ]);
     }
 

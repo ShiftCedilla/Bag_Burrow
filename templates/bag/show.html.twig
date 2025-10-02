@@ -29,6 +29,32 @@
             </tr>
         </tbody>
     </table>
+    
+<section>
+
+{% if bag.status.name == 'disponible' and app.user != bag.owner %}
+    <form method="post" action="{{ path('app_bag_request', {id: bag.id}) }}">
+        <button type="submit">Demander l'emprunt</button>
+    </form>
+{% endif %}
+
+{% if bag.status.name == 'demandé' and app.user == bag.owner %}
+    <form method="post" action="{{ path('app_bag_accept', {id: bag.id}) }}">
+        <button type="submit">Accepter</button>
+    </form>
+    <form method="post" action="{{ path('app_bag_refuse', {id: bag.id}) }}">
+        <button type="submit">Refuser</button>
+    </form>
+{% endif %}
+
+{% if bag.status.name == 'indisponible' and app.user == bag.owner %}
+    <form method="post" action="{{ path('app_bag_return', {id: bag.id}) }}">
+        <button type="submit">Marquer comme retourné</button>
+    </form>
+{% endif %}
+
+
+   </section>
 
     <a href="{{ path('app_bag_index') }}">back to list</a>
 
