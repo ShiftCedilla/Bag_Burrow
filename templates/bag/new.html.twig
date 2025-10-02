@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Bag{% endblock %}
+
+{% block body %}
+    <h1>Create new Bag</h1>
+
+    {{ include('bag/_form.html.twig') }}
+
+    <a href="{{ path('app_bag_index') }}">back to list</a>
+{% endblock %}

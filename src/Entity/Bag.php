@@ -45,6 +45,12 @@ class Bag
     #[ORM\JoinColumn(nullable: false)]
     private ?Status $status = null;
 
+    
+    public function __construct(){
+        //au moment de la construction de l'instance
+        $this->created_at = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
