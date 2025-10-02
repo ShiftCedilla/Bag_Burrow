@@ -3,14 +3,11 @@
 
 {% block body %}
 
+    <h1>Hello {{ user.name }}!</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    
+    <P>{{user.email}}</P>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/laragon/www/Bag_Burrow/src/Controller/UserController.php</code></li>
-        <li>Your template at <code>C:/laragon/www/Bag_Burrow/templates/user/index.html.twig</code></li>
-    </ul>
-</div>
+  
+
 {% endblock %}
