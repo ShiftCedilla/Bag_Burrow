@@ -26,12 +26,8 @@ final class BagController extends AbstractController
     }
 
     #[Route('/new', name: 'app_bag_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager)
+    public function new(Request $request, EntityManagerInterface $entityManager, UserInterface $user)
     {   
-    //    vérification que le user est bien connecté (AbstractController)
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-            /** @var \App\Entity\User $user */
-             $user = $this->getUser();
 
         $bag = new Bag();
         $form = $this->createForm(BagType::class, $bag);
@@ -51,7 +47,7 @@ final class BagController extends AbstractController
             $entityManager->persist($bag);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_bag_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_bag_index');
         }
 
         return $this->render('bag/new.html.twig', [
@@ -71,10 +67,9 @@ final class BagController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_bag_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Bag $bag, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Bag $bag, EntityManagerInterface $entityManager)
     {
-        //vérification que le user est bien connecté (AbstractController)
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+    
 
         $form = $this->createForm(BagType::class, $bag);
         $form->handleRequest($request);
@@ -93,7 +88,7 @@ final class BagController extends AbstractController
             }
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_bag_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_bag_index');
         }
 
         return $this->render('bag/edit.html.twig', [
@@ -106,7 +101,7 @@ final class BagController extends AbstractController
     #[Route('/{id}', name: 'app_bag_delete', methods: ['POST'])]
     public function delete(Request $request, Bag $bag, EntityManagerInterface $entityManager): Response
     {
-        //vérification que le user est bien connecté (AbstractController)
+    
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         if ($this->isCsrfTokenValid('delete'.$bag->getId(), $request->getPayload()->getString('_token'))) {
@@ -114,6 +109,6 @@ final class BagController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_bag_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_bag_index');
     }
 }

@@ -11,7 +11,7 @@ use Symfony\Component\Routing\Attribute\Route;
 final class UserController extends AbstractController
 {
     #[Route('/user', name: 'app_user')]
-    public function index(BagRepository $bagRepository)
+    public function profil(BagRepository $bagRepository)
     {   
         $user = $this->getUser(); 
 
