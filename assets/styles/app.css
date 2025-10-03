@@ -1,4 +1,286 @@
 body {
-    background-color: rgb(229, 234, 236);
+    background-color: #f5f5f5;
 }
 
+.bag-image {
+    width: 150px !important;
+    height: 150px !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+}
+
+/* ... existing styles ... */
+
+.logo-top-left {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1000;
+}
+
+.logo-image {
+    max-width: 120px;
+    height: auto;
+    background-color: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Ajuster le contenu pour éviter le chevauchement */
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    padding-top: 80px; /* Espace pour le logo fixe */
+}
+
+.bag-image-show {
+    width: 300px !important;
+    height: 300px !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+}
+
+/* Styles communs pour index et show */
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding: 30px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.page-header h1 {
+    color: #8B4513;
+    font-size: 2.5rem;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+}
+
+.btn-add {
+    background-color: #8B4513;
+    color: white;
+    padding: 12px 24px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+    margin-top: 15px;
+}
+
+.btn-add:hover {
+    background-color: #A0522D;
+    transform: translateY(-2px);
+}
+
+/* Styles pour l'index */
+.bags-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.bag-card {
+    background-color: #fafafa;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.bag-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+    border-color: #8B4513;
+}
+
+.bag-image-container {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.bag-image {
+    width: 100% !important;
+    height: 200px !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+}
+
+.bag-info {
+    text-align: left;
+}
+
+.bag-info p {
+    margin: 8px 0;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.bag-name {
+    font-weight: bold;
+    color: #8B4513;
+    font-size: 1.1rem !important;
+}
+
+.bag-owner {
+    color: #666;
+}
+
+.bag-status {
+    color: #666;
+}
+
+/* Styles pour la show */
+.show-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.show-content {
+    background-color: white;
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.show-header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.show-header h1 {
+    color: #8B4513;
+    font-size: 2.2rem;
+    margin: 0 0 10px 0;
+    font-weight: 600;
+}
+
+.show-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+}
+
+.show-image-section {
+    text-align: center;
+}
+
+.show-image-section img {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.show-info-section h2 {
+    color: #8B4513;
+    font-size: 1.4rem;
+    margin: 0 0 20px 0;
+}
+
+.show-details {
+    margin-bottom: 30px;
+}
+
+.show-details p {
+    margin: 12px 0;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+}
+
+.show-details strong {
+    color: #8B4513;
+    font-weight: 600;
+}
+
+.show-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn-action {
+    padding: 12px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #8B4513;
+    color: white;
+}
+
+.btn-primary:hover {
+    background-color: #A0522D;
+    transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: transparent;
+    color: #666;
+    border: 2px solid #e0e0e0;
+}
+
+.btn-secondary:hover {
+    border-color: #8B4513;
+    color: #8B4513;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .bags-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .show-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .show-actions {
+        flex-direction: column;
+    }
+}
+
+
+
+/* edit */
+.current-image {
+    margin-top: 15px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    border: 1px solid #e0e0e0;
+}
+
+.current-image p {
+    margin: 0 0 10px 0;
+    color: #8B4513;
+    font-weight: 500;
+}
+
+.current-img-preview {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid #8B4513;
+}
