@@ -14,6 +14,61 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-container">
+                <div class="header-left">
+                     <div class="logo-top-left">
+                        <img src="{{ asset('images/BagBorrowLogo.png') }}" alt="Bag Borrow Logo" class="logo-image">
+                    </div>
+                </div>
+                
+                <nav class="header-nav">
+                    <a href="{{ path('app_bag_index') }}" class="nav-link">Liste des sacs</a>
+                    
+                    {% if app.user %}
+                        <a href="{{ path('app_user') }}" class="nav-link">Mon compte</a>
+                        <a href="{{ path('app_logout') }}" class="nav-link logout">Se déconnecter</a>
+                    {% else %}
+                        <a href="{{ path('app_register') }}" class="nav-link">S'inscrire</a>
+                        <a href="{{ path('app_login') }}" class="nav-link">Se connecter</a>
+                    {% endif %}
+                </nav>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            {% block body %}{% endblock %}
+        </main>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <div class="footer-container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>Bag Borrow</h3>
+                        <p>Partagez et empruntez des sacs avec la communauté</p>
+                    </div>
+                    
+                    <div class="footer-section">
+                        <h4>Navigation</h4>
+                        <ul>
+                            <li><a href="{{ path('app_bag_index') }}">Liste des sacs</a></li>
+                            {% if app.user %}
+                                <li><a href="{{ path('app_user') }}">Mon compte</a></li>
+                            {% else %}
+                                <li><a href="{{ path('app_register') }}">S'inscrire</a></li>
+                                <li><a href="{{ path('app_login') }}">Se connecter</a></li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="footer-bottom">
+                    <p>&copy; {{ "now"|date("Y") }} Bag Borrow. Tous droits réservés.</p>
+                </div>
+            </div>
+        </footer>
     </body>
 </html>
