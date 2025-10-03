@@ -40,8 +40,9 @@
                 {% endif %}
 
                 <div class="show-actions">
-                    {% if bag.status.name == 'disponible' and app.user != bag.owner %}
-                    <a href="{{ path('app_bag_request', {'id': bag.id}) }}" class="btn-action btn-primary">Demande d'emprunt</a>
+                
+                    {% if bag.status.name == 'disponible' and app.user.id != bag.owner.id %}
+                    <a href="{{ path('app_bag_request', {'id': bag.id}) }}" class="btn-action btn-primary">Demande d'emprunt</a> 
                     {% endif %}
                     {# <a href="{{ path('app_bag_edit', {'id': bag.id}) }}" class="btn-action btn-primary">Modifier</a> #}
                     <a href="{{ path('app_bag_index') }}" class="btn-action btn-secondary">Retour à la liste</a>
