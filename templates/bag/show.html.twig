@@ -41,7 +41,7 @@
 
                 <div class="show-actions">
                 
-                    {% if bag.status.name == 'disponible' and app.user.id != bag.owner.id %}
+                    {% if bag.status.name == 'disponible' %}
                     <a href="{{ path('app_bag_request', {'id': bag.id}) }}" class="btn-action btn-primary">Demande d'emprunt</a> 
                     {% endif %}
                     {# <a href="{{ path('app_bag_edit', {'id': bag.id}) }}" class="btn-action btn-primary">Modifier</a> #}
