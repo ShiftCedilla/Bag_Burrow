@@ -3,30 +3,40 @@
 {% block title %}Bag index{% endblock %}
 
 {% block body %}
+<div class="page-container">
+    <div class="logo-top-left">
+        <img src="{{ asset('images/BagBorrowLogo.png') }}" alt="Bag Borrow Logo" class="logo-image">
+    </div>
+    
+    <div class="page-header">
+        <h1>Bag Borrow</h1>
+        <p>Découvrez et partagez vos sacs</p>
+        <a href="{{ path('app_bag_new') }}" class="btn-add">Ajouter un nouveau sac</a>
+    </div>
 
-    <h1>Bag Borrow</h1>
-    <a href="{{ path('app_bag_new') }}">Ajouter un nouveau sac</a>
-
-
-       
-        <tbody>
+    <div class="bags-grid">
         {% for bag in bags %}
-        <section>
-            <div>
-                <img src="{{asset('upload/bag/' ~ bag.img) }}" alt="">
+            <div class="bag-card">
+                <div class="bag-image-container">
+                    <a href="{{ path('app_bag_show', {'id': bag.id}) }}">
+                        {% if bag.img %}
+                            <img src="{{ asset('upload/bag/' ~ bag.img) }}" alt="{{ bag.name }}" class="bag-image">
+                        {% else %}
+                            <div class="no-image">Aucune image</div>
+                        {% endif %}
+                    </a>
+                </div>
+                <div class="bag-info">
+                    <p class="bag-name">{{ bag.name }}</p>
+                    <p class="bag-owner">Propriétaire: {{ bag.owner.name }}</p>
+                    <p class="bag-status">Disponibilité: {{ bag.status.name }}</p>
+                </div>
             </div>
-            <div>
-                <p>Nom:{{bag.name}} </p>
-                <p>Owner{{bag.owner.name}}</p>
-                {# <p>etat{{bag.condition.name}} </p> #}
-            </div>
-        </section>
-          
         {% else %}
-            <tr>
-                <td colspan="6">Non aucun enregistrement</td>
-            </tr>
+            <div class="no-bags">
+                <p>Aucun sac trouvé</p>
+            </div>
         {% endfor %}
-        </tbody>
-
+    </div>
+</div>
 {% endblock %}

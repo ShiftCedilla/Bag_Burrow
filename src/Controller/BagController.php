@@ -70,6 +70,14 @@ final class BagController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            // Gestion de l'upload d'image (même logique que dans new())
+            $file = $form->get('img')->getData(); 
+            if($file) {
+                $newFileName = time() . '-' . $file->getClientOriginalName();
+                $file->move($this->getParameter('bag_dir'), $newFileName); 
+                $bag->setImg($newFileName);
+            }
+
             $entityManager->flush();
 
             return $this->redirectToRoute('app_bag_index', [], Response::HTTP_SEE_OTHER);
