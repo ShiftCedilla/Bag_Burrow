@@ -1,27 +1,82 @@
 {% extends 'base.html.twig' %}
 
+{% block title %}Profil de {{ user.name }}{% endblock %}
 
 {% block body %}
+<div class="user-container">
+    <!-- Header avec nom de profil -->
+    <div class="user-header">
+        <div class="user-profile">
+            <h1>{{ user.name }}</h1>
+            <p class="user-email">{{ user.email }}</p>
+        </div>
+    </div>
 
-  <section>
+    <!-- Section des articles publiés -->
+    <div class="user-content">
+        <div class="articles-section">
+            <h2>Mes sacs publiés</h2>
+            
+            {% if bags is not empty %}
+                <div class="articles-list">
+                    {% for bag in bags %}
+                        <div class="article-item">
+                            <div class="article-info">
+                                <h3 class="article-name">{{ bag.name }}</h3>
+                                <p class="article-date">Publié le {{ bag.createdAt|date('d/m/Y à H:i') }}</p>
+                            </div>
+                            <div class="article-actions">
+                                <a href="{{ path('app_bag_edit', {'id': bag.id}) }}" class="btn-edit">
+                                    Modifier
+                                </a>
+                                <a href="{{ path('app_bag_delete', {'id': bag.id}) }}" class="btn-delete" 
+                                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">
+                                    Supprimer
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-articles">
+                    <p>Vous n'avez pas encore publié de sac.</p>
+                    <a href="{{ path('app_bag_new') }}" class="btn-add-first">Publier votre premier sac</a>
+                </div>
+            {% endif %}
+        </div>
 
-    <h1>Hello {{ user.name }}!</h1>
-    
-    <P>{{user.email}}</P>
-
-    </section>
-    <section>
-
-      <h2>Mes sacs</h2>
-
-      {% for bag in bags %}
-
-      <p>{{ bag.name}}</p>
-        
-      {% endfor %}
-      
-
-    </section>
-  
-
+        <!-- Section des emprunts en cours -->
+        <div class="borrows-section">
+            <h2>Mes emprunts en cours</h2>
+            
+            {% if borrowedBags is not empty %}
+                <div class="borrows-list">
+                    {% for bag in borrowedBags %}
+                        <div class="borrow-item">
+                            <div class="borrow-info">
+                                <h3 class="borrow-name">{{ bag.name }}</h3>
+                                <p class="borrow-owner">Propriétaire: {{ bag.owner.name }}</p>
+                                <p class="borrow-date">Emprunté le {{ bag.createdAt|date('d/m/Y à H:i') }}</p>
+                            </div>
+                            <div class="borrow-actions">
+                                <a href="{{ path('app_bag_show', {'id': bag.id}) }}" class="btn-view">
+                                    Voir
+                                </a>
+                                <a href="#" class="btn-return" 
+                                   onclick="return confirm('Êtes-vous sûr de vouloir rendre cet article ?')">
+                                    Rendre
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="no-borrows">
+                    <p>Vous n'avez aucun emprunt en cours.</p>
+                    <a href="{{ path('app_bag_index') }}" class="btn-browse">Parcourir les sacs</a>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}

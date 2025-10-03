@@ -21,15 +21,15 @@
                     <a href="{{ path('app_bag_show', {'id': bag.id}) }}">
                         {% if bag.img %}
                             <img src="{{ asset('upload/bag/' ~ bag.img) }}" alt="{{ bag.name }}" class="bag-image">
-                        {% else %}
+                         {% else %}
                             <div class="no-image">Aucune image</div>
                         {% endif %}
                     </a>
                 </div>
                 <div class="bag-info">
                     <p class="bag-name">{{ bag.name }}</p>
-                    <p class="bag-owner">Propriétaire: {{ bag.owner.name }}</p>
-                    <p class="bag-status">Disponibilité: {{ bag.status.name }}</p>
+                    <p class="bag-owner">Proposé par : {{ bag.owner.name }}</p>
+                    <p class="bag-condition">États: {{ bag.bagCondition.name }}</p>
                 </div>
             </div>
         {% else %}

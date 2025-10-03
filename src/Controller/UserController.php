@@ -15,15 +15,17 @@ final class UserController extends AbstractController
     {   
         $user = $this->getUser(); 
 
+        // Sacs publiés par l'utilisateur
         $bags = $bagRepository->findBy(['owner' => $user->getId()]);
+        
+        // Sacs empruntés par l'utilisateur
+        $borrowedBags = $bagRepository->findBy(['borrower' => $user->getId()]);
 
         
         return $this->render('user/index.html.twig', [
-            'user'=>$user,
-            'bags'=>$bags,
+            'user' => $user,
+            'bags' => $bags,
+            'borrowedBags' => $borrowedBags,
         ]);
     }
-
-
 }
-
