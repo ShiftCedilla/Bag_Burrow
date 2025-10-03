@@ -15,8 +15,7 @@ class BagRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Bag::class);
     }
-
-    //    /**
+ /**
     //     * @return Bag[] Returns an array of Bag objects
     //     */
     //    public function findByExampleField($value): array
