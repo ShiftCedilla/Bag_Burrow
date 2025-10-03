@@ -62,7 +62,7 @@
                                 <a href="{{ path('app_bag_show', {'id': bag.id}) }}" class="btn-view">
                                     Voir
                                 </a>
-                                <a href="#" class="btn-return" 
+                                <a href="{{ path('app_bag_show', {'id': bag.id}) }}" class="btn-return" 
                                    onclick="return confirm('Êtes-vous sûr de vouloir rendre cet article ?')">
                                     Rendre
                                 </a>
@@ -73,7 +73,7 @@
             {% else %}
                 <div class="no-borrows">
                     <p>Vous n'avez aucun emprunt en cours.</p>
-                    <a href="{{ path('app_bag_index') }}" class="btn-browse">Parcourir les sacs</a>
+                    <a href="{{ path('app_bag_index') }}" class="btn-browse">Voir tous les sacs</a>
                 </div>
             {% endif %}
         </div>

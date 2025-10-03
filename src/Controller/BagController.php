@@ -148,4 +148,17 @@ public function refuseBorrow(Bag $bag, EntityManagerInterface $em, StatusReposit
     $em->flush();
     return $this->redirectToRoute('app_user'); 
 }
+
+#[Route('/{id}/return_borrow', name: 'app_borrow_return')]
+public function returnBorrow(Bag $bag, EntityManagerInterface $em, UserInterface $user)
+{
+  
+
+    $bag->setBorrower(null);
+    $bag->setStatus($em->getRepository(\App\Entity\Status::class)->findOneBy(['name' => 'disponible']));
+
+    $em->flush();
+
+    return $this->redirectToRoute('app_user');
+}
 }
