@@ -26,6 +26,10 @@ class BagType extends AbstractType
             ])
             ->add('created_at', null, [
                 'widget' => 'single_text',
+                'label'=> false,
+                 'attr' => [
+                    'style' => 'display: none',
+                ],
             ])
             ->add('type', EntityType::class, [
                 'class' => Type::class,
@@ -35,17 +39,29 @@ class BagType extends AbstractType
                 'class' => Condition::class,
                 'choice_label' => 'name',
             ])
-            ->add('owner', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
-            ->add('borrower', EntityType::class, [
-                'class' => User::class,
-                'choice_label' => 'id',
-            ])
+            // ->add('owner', EntityType::class, [
+            //     'class' => User::class,
+            //     'choice_label' => 'id',
+            //     'label'=> false,
+            //      'attr' => [
+            //         'style' => 'display: none',
+            //     ],
+            // ])
+            // ->add('borrower', EntityType::class, [
+            //     'class' => User::class,
+            //     'choice_label' => 'id',
+            //     'label'=> false,
+            //      'attr' => [
+            //         'style' => 'display: none',
+            //     ],
+            // ])
             ->add('status', EntityType::class, [
                 'class' => Status::class,
                 'choice_label' => 'name',
+                'label'=> false,
+                 'attr' => [
+                    'style' => 'display: none',
+                ],
             ])
         ;
     }

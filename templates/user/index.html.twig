@@ -3,14 +3,25 @@
 
 {% block body %}
 
+  <section>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello {{ user.name }}!</h1>
+    
+    <P>{{user.email}}</P>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/laragon/www/Bag_Burrow/src/Controller/UserController.php</code></li>
-        <li>Your template at <code>C:/laragon/www/Bag_Burrow/templates/user/index.html.twig</code></li>
-    </ul>
-</div>
+    </section>
+    <section>
+
+      <h2>Mes sacs</h2>
+
+      {% for bag in bags %}
+
+      <p>{{ bag.name}}</p>
+        
+      {% endfor %}
+      
+
+    </section>
+  
+
 {% endblock %}
