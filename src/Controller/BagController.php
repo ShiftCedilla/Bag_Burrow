@@ -141,4 +141,11 @@ public function acceptBorrow(Bag $bag, EntityManagerInterface $em, StatusReposit
     return $this->redirectToRoute('app_user'); 
 }
 
+#[Route('/{id}/refuse_borrow', name: 'app_borrow_refuse')]
+public function refuseBorrow(Bag $bag, EntityManagerInterface $em, StatusRepository $statusRepository)
+{
+    $bag->setStatus($statusRepository -> AvaibleBag());
+    $em->flush();
+    return $this->redirectToRoute('app_user'); 
+}
 }
