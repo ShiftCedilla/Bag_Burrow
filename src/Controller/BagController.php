@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Bag;
+use App\Entity\Status;
 use App\Entity\User;
 use App\Form\BagType;
 use App\Repository\BagRepository;
+use App\Repository\StatusRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,20 +20,19 @@ use Symfony\Component\Security\Core\User\UserInterface;
 final class BagController extends AbstractController
 {
     #[Route(name: 'app_bag_index', methods: ['GET'])]
-    public function index(BagRepository $bagRepository)
+    public function index(BagRepository $bagRepository, StatusRepository $statusRepository)
     {
+        $status = $statusRepository ->avaibleBag();
         return $this->render('bag/index.html.twig', [
-            'bags' => $bagRepository->findAll(),
+            'bags' => $bagRepository->findBy(
+                ['status'=> $status]
+            )
         ]);
     }
 
     #[Route('/new', name: 'app_bag_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager)
+    public function new(Request $request, EntityManagerInterface $entityManager, UserInterface $user)
     {   
-    //    vérification que le user est bien connecté (AbstractController)
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-            /** @var \App\Entity\User $user */
-             $user = $this->getUser();
 
         $bag = new Bag();
         $form = $this->createForm(BagType::class, $bag);
@@ -51,31 +52,30 @@ final class BagController extends AbstractController
             $entityManager->persist($bag);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_bag_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_bag_index');
         }
 
         return $this->render('bag/new.html.twig', [
             'bag' => $bag,
             'form' => $form,
-            ]);
+            ]); 
         
     }
    
 
     #[Route('/{id}', name: 'app_bag_show', methods: ['GET'])]
-    public function show(Bag $bag): Response
-    {
+    public function show(Bag $bag, StatusRepository $statusRepository)
+    {   $status = $statusRepository ->avaibleBag();
         return $this->render('bag/show.html.twig', [
             'bag' => $bag,
+            'status'=> $status
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_bag_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Bag $bag, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, Bag $bag, EntityManagerInterface $entityManager)
     {
-        //vérification que le user est bien connecté (AbstractController)
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
+    
         $form = $this->createForm(BagType::class, $bag);
         $form->handleRequest($request);
 
@@ -93,7 +93,7 @@ final class BagController extends AbstractController
             }
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_bag_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_bag_index');
         }
 
         return $this->render('bag/edit.html.twig', [
@@ -104,16 +104,48 @@ final class BagController extends AbstractController
 
 
     #[Route('/{id}', name: 'app_bag_delete', methods: ['POST'])]
-    public function delete(Request $request, Bag $bag, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, Bag $bag, EntityManagerInterface $entityManager)
     {
-        //vérification que le user est bien connecté (AbstractController)
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
         if ($this->isCsrfTokenValid('delete'.$bag->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($bag);
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_bag_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_bag_index');
     }
+
+/////Demande d'emprunt d'un sac////////////////////
+ 
+    #[Route('/{id}/borrow_request', name: 'app_bag_request')]
+    public function borrowRequest(Bag $bag, StatusRepository $statusRepository, EntityManagerInterface $em, UserInterface $user)
+{
+    if ($bag->getStatus()->getName() === 'disponible') {
+        $user = $this->getUser(); 
+        $statusDemande = $statusRepository -> DemandeBag();
+        $bag->setBorrower($user);
+        $bag->setStatus($statusDemande);
+        $em->flush();
+        return $this->redirectToRoute('app_bag_index');
+        }
+     return $this->redirectToRoute('app_bag_index');
+}
+/////////traitement de la demande par l'owner du sac/////////
+
+#[Route('/{id}/accept_borrow', name: 'app_borrow_accept')]
+public function acceptBorrow(Bag $bag, EntityManagerInterface $em, StatusRepository $statusRepository)
+{
+
+    $bag->setStatus($statusRepository -> NotAvaibleBag());
+    $em->flush();
+    return $this->redirectToRoute('app_user'); 
+}
+
+#[Route('/{id}/refuse_borrow', name: 'app_borrow_refuse')]
+public function refuseBorrow(Bag $bag, EntityManagerInterface $em, StatusRepository $statusRepository)
+{
+    $bag->setStatus($statusRepository -> AvaibleBag());
+    $em->flush();
+    return $this->redirectToRoute('app_user'); 
+}
 }
