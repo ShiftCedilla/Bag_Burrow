@@ -11,10 +11,11 @@ use Symfony\Component\Routing\Attribute\Route;
 final class UserController extends AbstractController
 {
     #[Route('/user', name: 'app_user')]
-    public function profil(BagRepository $bagRepository)
+    public function index(BagRepository $bagRepository)
     {   
         $user = $this->getUser(); 
 
+        
         $ownerbags = $bagRepository->findBy(['owner' => $user->getId()]);
         $borrowedbags = $bagRepository->findBy(['borrower' => $user-> getId()]);
         

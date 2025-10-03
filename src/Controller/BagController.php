@@ -117,11 +117,11 @@ final class BagController extends AbstractController
 
 /////Demande d'emprunt d'un sac////////////////////
  
-    #[Route('/{id}/borrow_request', name: 'app_bag_request', methods: ['POST'])]
+    #[Route('/{id}/borrow_request', name: 'app_bag_request')]
     public function borrowRequest(Bag $bag, StatusRepository $statusRepository, EntityManagerInterface $em, UserInterface $user)
 {
     if ($bag->getStatus()->getName() === 'disponible') {
-
+        $user = $this->getUser(); 
         $statusDemande = $statusRepository -> DemandeBag();
         $bag->setBorrower($user);
         $bag->setStatus($statusDemande);
@@ -130,6 +130,15 @@ final class BagController extends AbstractController
         }
      return $this->redirectToRoute('app_bag_index');
 }
+/////////traitement de la demande par l'owner du sac/////////
 
+#[Route('/{id}/accept_borrow', name: 'app_borrow_accept')]
+public function acceptBorrow(Bag $bag, EntityManagerInterface $em, StatusRepository $statusRepository)
+{
+
+    $bag->setStatus($statusRepository -> NotAvaibleBag());
+    $em->flush();
+    return $this->redirectToRoute('app_user'); 
+}
 
 }
