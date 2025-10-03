@@ -27,7 +27,9 @@ class Status
     public function __construct()
     {
         $this->bags = new ArrayCollection();
+       
     }
+   
 
     public function getId(): ?int
     {

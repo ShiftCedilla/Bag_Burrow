@@ -22,7 +22,7 @@ final class BagController extends AbstractController
     #[Route(name: 'app_bag_index', methods: ['GET'])]
     public function index(BagRepository $bagRepository, StatusRepository $statusRepository)
     {
-        $status = $statusRepository ->findOneBy(['name'=> 'disponible']);
+        $status = $statusRepository ->avaibleBag();
         return $this->render('bag/index.html.twig', [
             'bags' => $bagRepository->findBy(
                 ['status'=> $status]
@@ -58,16 +58,17 @@ final class BagController extends AbstractController
         return $this->render('bag/new.html.twig', [
             'bag' => $bag,
             'form' => $form,
-            ]);
+            ]); 
         
     }
    
 
     #[Route('/{id}', name: 'app_bag_show', methods: ['GET'])]
-    public function show(Bag $bag): Response
-    {
+    public function show(Bag $bag, StatusRepository $statusRepository)
+    {   $status = $statusRepository ->avaibleBag();
         return $this->render('bag/show.html.twig', [
             'bag' => $bag,
+            'status'=> $status
         ]);
     }
 
@@ -117,61 +118,17 @@ final class BagController extends AbstractController
 /////Demande d'emprunt d'un sac////////////////////
  
     #[Route('/{id}/borrow_request', name: 'app_bag_request', methods: ['POST'])]
-public function borrowRequest(Bag $bag, StatusRepository $statusRepository, EntityManagerInterface $em, UserInterface $user)
+    public function borrowRequest(Bag $bag, StatusRepository $statusRepository, EntityManagerInterface $em, UserInterface $user)
 {
     if ($bag->getStatus()->getName() === 'disponible') {
 
-        $statusDemande = $statusRepository -> findDemande();
+        $statusDemande = $statusRepository -> DemandeBag();
         $bag->setBorrower($user);
         $bag->setStatus($statusDemande);
         $em->flush();
         return $this->redirectToRoute('app_bag_index');
         }
      return $this->redirectToRoute('app_bag_index');
-}
-
-#[Route('/{id}/accept_borrow', name: 'app_borrow_accept', methods: ['POST'])]
-public function acceptBorrow(Bag $bag, EntityManagerInterface $em, UserInterface $user)
-{
-    // Vérifie que l’utilisateur connecté est bien le propriétaire
-    if ($bag->getOwner() !== $user) {
-        throw $this->createAccessDeniedException('Vous n\'êtes pas le propriétaire de ce sac.');
-    }
-
-    $bag->setStatus($em->getRepository(\App\Entity\Status::class)->findOneBy(['name' => 'indisponible']));
-
-    $em->flush();;
-    return $this->redirectToRoute('app_user'); 
-}
-
-#[Route('/{id}/refuse_borrow', name: 'app_borrow_refuse', methods: ['POST'])]
-public function refuseBorrow(Bag $bag, EntityManagerInterface $em, UserInterface $user)
-{
-    if ($bag->getOwner() !== $user) {
-        throw $this->createAccessDeniedException('Vous n\'êtes pas le propriétaire de ce sac.');
-    }
-
-    $bag->setBorrower(null);
-    $bag->setStatus($em->getRepository(\App\Entity\Status::class)->findOneBy(['name' => 'disponible']));
-
-    $em->flush();
-
-    return $this->redirectToRoute('app_user');
-}
-
-#[Route('/{id}/return_borrow', name: 'app_borrow_return', methods: ['POST'])]
-public function returnBorrow(Bag $bag, EntityManagerInterface $em, UserInterface $user)
-{
-    if ($bag->getOwner() !== $user) {
-        throw $this->createAccessDeniedException('Vous n\'êtes pas le propriétaire de ce sac.');
-    }
-
-    $bag->setBorrower(null);
-    $bag->setStatus($em->getRepository(\App\Entity\Status::class)->findOneBy(['name' => 'disponible']));
-
-    $em->flush();
-
-    return $this->redirectToRoute('app_user');
 }
 
 
