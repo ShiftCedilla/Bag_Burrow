@@ -1,21 +1,41 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Inscription{% endblock %}
 
 {% block body %}
-    <h1>Créer un compte</h1>
+<div class="form-page-container auth-page">
+    <div class="form-header">
+        <h1>Inscription</h1>
+        <p>Créez votre compte Bag Borrow</p>
+    </div>
 
-    {{ form_errors(registrationForm) }}
+    <div class="form-wrapper">
+        {{ form_start(registrationForm) }}
+            <div class="form-group">
+                {{ form_label(registrationForm.name, 'Nom') }}
+                {{ form_widget(registrationForm.name, {'attr': {'class': 'form-input'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(registrationForm.email, 'Email') }}
+                {{ form_widget(registrationForm.email, {'attr': {'class': 'form-input'}}) }}
+            </div>
+            <div class="form-group">
+                {{ form_label(registrationForm.plainPassword, 'Mot de passe') }}
+                {{ form_widget(registrationForm.plainPassword, {'attr': {'class': 'form-input'}}) }}
+            </div>
+            <div class="form-group checkbox-group">
+                {{ form_widget(registrationForm.agreeTerms) }}
+                {{ form_label(registrationForm.agreeTerms, 'J\'accepte les conditions d\'utilisation') }}
+            </div>
 
-    {{ form_start(registrationForm) }}
-        
-        {{ form_row(registrationForm.name) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">S'inscrire</button>
+            </div>
+        {{ form_end(registrationForm) }}
 
-        <button type="submit" class="btn">Envoyer</button>
-    {{ form_end(registrationForm) }}
+        <div class="form-links">
+            <p>Déjà un compte ? <a href="{{ path('app_login') }}">Se connecter</a></p>
+        </div>
+    </div>
+</div>
 {% endblock %}
