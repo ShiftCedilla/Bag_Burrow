@@ -1,13 +1,66 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Bag{% endblock %}
+{% block title %}Modifier {{ bag.name }}{% endblock %}
 
 {% block body %}
-    <h1>Edit Bag</h1>
+<div class="form-page-container">
+    <div class="form-header">
+        <h1>Modifier le sac</h1>
+        <p>Mettez à jour les informations de votre sac</p>
+    </div>
 
-    {{ include('bag/_form.html.twig', {'button_label': 'Update'}) }}
+    <div class="form-wrapper">
+        {{ form_start(form) }}
+            <div class="form-section">
+                <h3>Informations générales</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.name, 'Nom du sac') }}
+                        {{ form_widget(form.name, {'attr': {'class': 'form-input', 'placeholder': 'Ex: Sac à dos de randonnée'}}) }}
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    {{ form_label(form.description, 'Description') }}
+                    {{ form_widget(form.description, {'attr': {'class': 'form-textarea', 'placeholder': 'Décrivez votre sac, son état, son utilisation...'}}) }}
+                </div>
+            </div>
 
-    <a href="{{ path('app_bag_index') }}">back to list</a>
+            <div class="form-section">
+                <h3>Caractéristiques</h3>
+                <div class="form-row">
+                    <div class="form-group">
+                        {{ form_label(form.type, 'Type de sac') }}
+                        {{ form_widget(form.type, {'attr': {'class': 'form-select'}}) }}
+                    </div>
+                    
+                    <div class="form-group">
+                        {{ form_label(form.bagCondition, 'État') }}
+                        {{ form_widget(form.bagCondition, {'attr': {'class': 'form-select'}}) }}
+                    </div>
+                </div>
+            </div>
 
-    {{ include('bag/_delete_form.html.twig') }}
+            <div class="form-section">
+                <h3>Image</h3>
+                <div class="form-group">
+                    {{ form_label(form.img, 'Photo du sac') }}
+                    {{ form_widget(form.img, {'attr': {'class': 'form-file'}}) }}
+                    <small class="form-help">Formats acceptés : JPG, PNG. Taille max : 5MB</small>
+                    {% if bag.img %}
+                        <div class="current-image">
+                            <p><strong>Image actuelle :</strong></p>
+                            <img src="{{ asset('upload/bag/' ~ bag.img) }}" alt="{{ bag.name }}" class="current-img-preview">
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">Mettre à jour</button>
+                <a href="{{ path('app_bag_show', {'id': bag.id}) }}" class="btn-cancel">Annuler</a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
 {% endblock %}
