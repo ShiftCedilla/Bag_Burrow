@@ -37,10 +37,15 @@
                                 <a href="{{ path('app_bag_edit', {'id': bag.id}) }}" class="btn-edit">
                                     Modifier
                                 </a>
-                                <a href="{{ path('app_bag_delete', {'id': bag.id}) }}" class="btn-delete" 
-                                   onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">
-                                    Supprimer
-                                </a>
+                                
+                                <!-- Formulaire de suppression avec token CSRF -->
+                                <form method="post" action="{{ path('app_bag_delete', {'id': bag.id}) }}" style="display: inline;">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ bag.id) }}">
+                                    <button type="submit" class="btn-delete" 
+                                            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?')">
+                                        Supprimer
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     {% endfor %}
@@ -53,20 +58,19 @@
             {% endif %}
         </div>
 
+        <div class="usr-content">
+            <div class="article-section">
+                <h2>Demandes d'emprunt de mes sacs</h2>
 
-        <div class="borrows-section">
-            <div class="requested-bags-section">
-        <h2>Demandes d'emprunt de mes sacs</h2>
-
-            {% if requestedBags is not empty %}
-            {% for bag in requestedBags %}
-             <div class="request-item">
-                <p>{{ bag.name }} demandé par {{  bag.borrower ? bag.borrower.name : 'Utilisateur inconnu'  }}</p>
-                <form method="post" action="{{ path('app_borrow_accept', {'id': bag.id}) }}">
-                    <button type="submit">Accepter</button>
-                </form>
-                <form method="post" action="{{ path('app_borrow_refuse', {'id': bag.id}) }}">
-                    <button type="submit">Refuser</button>
+             {% if requestedBags is not empty %}
+                 {% for bag in requestedBags %}
+                    <div class="article-item">
+                        <p>{{ bag.name }} demandé par {{  bag.borrower ? bag.borrower.name : 'Utilisateur inconnu'  }}</p>
+                            <form method="post" action="{{ path('app_borrow_accept', {'id': bag.id}) }}">
+                                <button type="submit">Accepter</button>
+                        </form>
+                             <form method="post" action="{{ path('app_borrow_refuse', {'id': bag.id}) }}">
+                            <button type="submit">Refuser</button>
                 </form>
 
             </div> 

@@ -73,9 +73,14 @@ final class BagController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_bag_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Bag $bag, EntityManagerInterface $entityManager)
-    {
-    
+    public function edit(Request $request, Bag $bag, EntityManagerInterface $entityManager, UserInterface $user)
+    {   
+        //condition pour que seul le preopriétaire du sac puisse le modifier
+        if ($bag->getOwner() !== $user) {
+        $this-> addFlash('error' , 'Vous ne pouvez pas modifier un sac qui ne vous appartient pas');
+        return $this-> redirectToRoute('app_bag_index');
+        }
+
         $form = $this->createForm(BagType::class, $bag);
         $form->handleRequest($request);
 
@@ -104,8 +109,13 @@ final class BagController extends AbstractController
 
 
     #[Route('/{id}', name: 'app_bag_delete', methods: ['POST'])]
-    public function delete(Request $request, Bag $bag, EntityManagerInterface $entityManager)
-    {
+    public function delete(Request $request, Bag $bag, EntityManagerInterface $entityManager, UserInterface $user)
+    { 
+        //condition pour que seul le preopriétaire du sac puisse le supprimer
+        if ($bag->getOwner() !== $user) {
+        $this->addFlash('error','Vous ne pouvez pas supprimer un sac qui ne vous appartient pas.');
+        return $this-> redirectToRoute('app_bag_index');
+        }
 
         if ($this->isCsrfTokenValid('delete'.$bag->getId(), $request->getPayload()->getString('_token'))) {
             $entityManager->remove($bag);
@@ -119,7 +129,14 @@ final class BagController extends AbstractController
  
     #[Route('/{id}/borrow_request', name: 'app_bag_request')]
     public function borrowRequest(Bag $bag, StatusRepository $statusRepository, EntityManagerInterface $em, UserInterface $user)
-{
+{  
+     //empécher le propréiétaire de pouvoir emprunter son sac
+    if($bag->getOwner() === $user) {
+        $this-> addFlash('error' , 'Vous ne pouvez pas emprunté votre propre sac');
+        return $this-> redirectToRoute('app_bag_index');
+    }
+
+    //si le sac est disponible alors modification du status name en 'demandé' et le demandeur devient le borrower provisoirement
     if ($bag->getStatus()->getName() === 'disponible') {
         
         $statusDemande = $statusRepository -> DemandeBag();
@@ -135,24 +152,40 @@ final class BagController extends AbstractController
 #[Route('/{id}/accept_borrow', name: 'app_borrow_accept')]
 public function acceptBorrow(Bag $bag, EntityManagerInterface $em, StatusRepository $statusRepository, UserInterface $user)
 {
-  
+    //condition pour que seul le preopriétaire du sac puisse accepter une demande d'emprunt
+    if ($bag->getOwner() !== $user) {
+    $this->addFlash('error','Vous ne pouvez pas accepter une demande pour un sac qui ne vous appartient pas.');
+    return $this->redirectToRoute('app_bag_index');
+    }
+
     $bag->setStatus($statusRepository -> NotAvaibleBag());
     $em->flush();
     return $this->redirectToRoute('app_user'); 
 }
 
 #[Route('/{id}/refuse_borrow', name: 'app_borrow_refuse')]
-public function refuseBorrow(Bag $bag, EntityManagerInterface $em, StatusRepository $statusRepository)
-{
+public function refuseBorrow(Bag $bag, EntityManagerInterface $em, StatusRepository $statusRepository , UserInterface $user)
+{   
+    //condition pour que seul le preopriétaire du sac puisse refuser une demande d'emprunt
+    if ($bag->getOwner() !== $user) {
+    $this->addFlash('error', 'Vous ne pouvez pas refuser une demande pour un sac qui ne vous appartient pas.');
+    return $this->redirectToRoute('app_bag_index');
+    }
+
     $bag->setStatus($statusRepository -> AvaibleBag());
     $em->flush();
     return $this->redirectToRoute('app_user'); 
 }
 
 #[Route('/{id}/return_borrow', name: 'app_borrow_return')]
-public function returnBorrow(Bag $bag, EntityManagerInterface $em, StatusRepository $statusRepository)
+public function returnBorrow(Bag $bag, EntityManagerInterface $em, StatusRepository $statusRepository, UserInterface $user)
 {
-  
+    //condition pour que seul le preopriétaire du sac puisse retourner un emprunt
+    if ($bag->getOwner() !== $user) {
+    $this->addFlash('error', 'Vous ne pouvez pas retourner un emprunt pour un sac qui ne vous appartient pas.');
+    return $this->redirectToRoute('app_bag_index');
+     }
+
     $bag->setBorrower(null);
     $bag->setStatus($statusRepository -> AvaibleBag());
     $em->flush();
