@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Bag;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -15,20 +16,20 @@ class BagRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Bag::class);
     }
- /**
-    //     * @return Bag[] Returns an array of Bag objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('b')
-    //            ->andWhere('b.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('b.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+ /**    * @param User $user
+        * @return Bag[] Returns an array of Bag objects
+       */
+      public function findRequestedByOwner(User $user): array
+    {
+        return $this->createQueryBuilder('bag')
+            ->join('bag.status', 'status')
+            ->andWhere('bag.owner = :user')
+            ->andWhere('status.name = :demande')
+            ->setParameter('user', $user)
+            ->setParameter('demande', 'demandé')
+            ->getQuery()
+            ->getResult();
+    }
 
     //    public function findOneBySomeField($value): ?Bag
     //    {
