@@ -11,14 +11,19 @@
             <p class="user-email">{{ user.email }}</p>
         </div>
     </div>
+     <div class="page-header">
+            <a href="{{ path('app_bag_new') }}" class="btn-add">Ajouter un nouveau sac</a>
+     </div>
 
     <!-- Section des articles publiés -->
     <div class="user-content">
         <div class="articles-section">
+            
             <h2>Mes sacs publiés</h2>
             
             {% if bags is not empty %}
                 <div class="articles-list">
+                    
                     {% for bag in bags %}
                         <div class="article-item">
                             <div class="article-info">
@@ -28,7 +33,7 @@
                             <div class="article-actions">
                                 {% if bag.status.name is same as ('indisponible') %}
                                
-                                <a href="{{ path('app_borrow_return', {'id': bag.id}) }}" class="btn-return" 
+                                <a href="{{ path('app_borrow_return', {'id': bag.id}) }}" class="btn-edit" 
                                    onclick="return confirm('Êtes-vous sûr de vouloir rendre cet article ?')">
                                     Retour du sac
                                 </a>
@@ -57,44 +62,43 @@
                 </div>
             {% endif %}
         </div>
-
-        <div class="usr-content">
-            <div class="article-section">
+    </div>
+        <div class="user-content">
+            <div class="articles-section">
                 <h2>Demandes d'emprunt de mes sacs</h2>
 
              {% if requestedBags is not empty %}
                  {% for bag in requestedBags %}
-                    <div class="article-item">
+                    <div class="article-actions">
                         <p>{{ bag.name }} demandé par {{  bag.borrower ? bag.borrower.name : 'Utilisateur inconnu'  }}</p>
                             <form method="post" action="{{ path('app_borrow_accept', {'id': bag.id}) }}">
-                                <button type="submit">Accepter</button>
+                                <button class="btn-edit" type="submit">Accepter</button>
                         </form>
                              <form method="post" action="{{ path('app_borrow_refuse', {'id': bag.id}) }}">
-                            <button type="submit">Refuser</button>
-                </form>
-
-            </div> 
-            {% endfor %}
+                                <button class='btn-delete' type="submit">Refuser</button>
+                        </form>
+                    </div> 
+                 {% endfor %}
             {% else %}
-            <p>Aucune demande d'emprunt pour vos sacs.</p>
-             {% endif %} 
-            </div>
+            <p class="no-articles">Aucune demande d'emprunt pour vos sacs.</p>
+            {% endif %} 
+         </div>
+    </div>
 
+    <div class="user-content">
+        <div class="articles-section">
             <h2>Les sacs empruntés</h2>
-            
             {% if borrowedBags is not empty %}
-                <div class="borrows-list">
-                    
+                <div class="articles-list">
                     {% for bag in borrowedBags %}
                         {% if bag.status.name is same as ('indisponible') %}
-                        <div class="borrow-item">
-                            <div class="borrow-info">
-                                <h3 class="borrow-name">{{ bag.name }}</h3>
-                                <p class="borrow-owner">Propriétaire: {{ bag.owner.name }}</p>
-                            
+                        <div class="article-item">
+                            <div class="article-info">
+                                <h3 class="article-name">{{ bag.name }}</h3>
+                                <p class="article-owner">Propriétaire: {{ bag.owner.name }}</p>
                             </div>
-                            <div class="borrow-actions">
-                                <a href="{{ path('app_bag_show', {'id': bag.id}) }}" class="btn-view">
+                            <div class="article-actions">
+                                <a href="{{ path('app_bag_show', {'id': bag.id}) }}" class="btn-edit">
                                     Voir
                                 </a>
                             </div>
@@ -103,12 +107,11 @@
                     {% endfor %}
                 </div>
             {% else %}
-                <div class="no-borrows">
+                <div class="no-articles">
                     <p>Vous n'avez aucun emprunt en cours.</p>
-                    <a href="{{ path('app_bag_index') }}" class="btn-browse">Voir tous les sacs</a>
+                    <a href="{{ path('app_bag_index') }}" class="btn-add-first">Voir tous les sacs</a>
                 </div>
             {% endif %}
         </div>
     </div>
-</div>
 {% endblock %}
