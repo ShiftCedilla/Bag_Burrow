@@ -75,7 +75,7 @@ final class BagController extends AbstractController
     #[Route('/{id}/edit', name: 'app_bag_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Bag $bag, EntityManagerInterface $entityManager, UserInterface $user)
     {   
-        //condition pour que seul le preopriétaire du sac puisse le modifier
+        // condition pour que seul le preopriétaire du sac puisse le modifier
         if ($bag->getOwner() !== $user) {
         $this-> addFlash('error' , 'Vous ne pouvez pas modifier un sac qui ne vous appartient pas');
         return $this-> redirectToRoute('app_bag_index');

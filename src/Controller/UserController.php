@@ -19,15 +19,8 @@ final class UserController extends AbstractController
         $bags = $bagRepository->findBy(['owner' => $user->getId()]);
 
         //sac demandé par un autre utilisateur
-         $requestedBags = $bagRepository->createQueryBuilder('bag')
-        ->join('bag.status', 'status')
-        ->andWhere('bag.owner = :user')
-        ->andWhere('status.name = :demande')
-        ->setParameter('user', $user)
-        ->setParameter('demande', 'demandé')
-        ->getQuery()
-        ->getResult();
-        
+         $requestedBags = $bagRepository->findRequestedByOwner($user);
+
         // Sacs empruntés par l'utilisateur
         $borrowedBags = $bagRepository->findBy(['borrower' => $user->getId()]);
         
